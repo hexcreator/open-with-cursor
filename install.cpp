@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <shellapi.h>
+#include <shlobj.h>
 
 // Function to check if the current process is running with elevated privileges
 bool IsElevated()
@@ -70,9 +71,31 @@ bool CreateRegistryKey(HKEY hKeyParent, LPCSTR subKey, LPCSTR valueName, LPCSTR 
     return true;
 }
 
-// Function to install the context menu item
+std::string GetCursorPath()
+{
+    char path[MAX_PATH];
+    if (SUCCEEDED(SHGetFolderPathA(NULL, CSIDL_LOCAL_APPDATA, NULL, 0, path)))
+    {
+        std::string fullPath = std::string(path) + "\\Programs\\cursor\\Cursor.exe";
+        return fullPath;
+    }
+    return "";
+}
+
+bool FileExists(const std::string& path)
+{
+    DWORD attrib = GetFileAttributesA(path.c_str());
+    return (attrib != INVALID_FILE_ATTRIBUTES && !(attrib & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 bool InstallContextMenu(const std::string& exePath)
 {
+    if (!FileExists(exePath))
+    {
+        std::cerr << "Error: File not found: " << exePath << std::endl;
+        return false;
+    }
+
     std::string subKey = "Directory\\Background\\shell\\Open with Cursor";
     std::string commandKey = subKey + "\\command";
 
@@ -100,19 +123,27 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    std::string exePath = "C:\\Users\\%USERNAME%\\AppData\\Local\\Programs\\cursor\\Cursor.exe";
+    std::string exePath = GetCursorPath();
     if (argc > 1)
     {
         exePath = argv[1];
     }
 
+    if (exePath.empty())
+    {
+        MessageBoxA(NULL, "Failed to determine Cursor.exe path.", "Error", MB_OK | MB_ICONERROR);
+        return 1;
+    }
+
     if (InstallContextMenu(exePath))
     {
-        MessageBoxA(NULL, "Context menu item installed successfully.", "Success", MB_OK | MB_ICONINFORMATION);
+        std::string successMsg = "Context menu item installed successfully.\nPath: " + exePath;
+        MessageBoxA(NULL, successMsg.c_str(), "Success", MB_OK | MB_ICONINFORMATION);
     }
     else
     {
-        MessageBoxA(NULL, "Failed to install context menu item.", "Error", MB_OK | MB_ICONERROR);
+        std::string errorMsg = "Failed to install context menu item.\nAttempted path: " + exePath;
+        MessageBoxA(NULL, errorMsg.c_str(), "Error", MB_OK | MB_ICONERROR);
     }
 
     return 0;
