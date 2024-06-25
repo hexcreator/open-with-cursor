@@ -19,7 +19,7 @@ g++ -o uninstall uninstall.cpp -static
 To use the context menu item, follow these steps:
 
 1. **Download the Executables:**
-   - Visit the [releases page](https://github.com/your-repo/releases) of this project.
+   - Visit the [releases page](https://github.com/hexcreator/open-with-cursor/releases) of this project.
    - Download the `install.exe` and `uninstall.exe` files from the latest release.
 
 2. **Install the Context Menu Item:**
