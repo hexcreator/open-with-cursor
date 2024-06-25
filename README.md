@@ -1,2 +1,32 @@
-# open-with-cursor
-Open with Cursor is a small utility that adds a context menu item to Windows Explorer, allowing you to open directories with the Cursor program, much like the "Open with Code" feature of VSCode.
+# Cursor Context Menu Installer
+
+This project provides a simple way to add and remove a context menu item in Windows Explorer for opening directories with the Cursor application.
+
+## Installation
+
+To install the context menu item, run the `install` executable. By default, it will use the path `C:\Users\%USERNAME%\AppData\Local\Programs\cursor\Cursor.exe` for the Cursor application. You can also provide a custom path to the Cursor executable as a command-line argument.
+
+## Compilation
+I used MinGW to compile this project, but you can use any other compiler that supports C++. Example commands:
+
+```bash
+g++ -o install install.cpp -static
+g++ -o uninstall uninstall.cpp -static
+```
+
+## Usage Instructions
+
+To use the context menu item, follow these steps:
+
+1. **Download the Executables:**
+   - Visit the [releases page](https://github.com/your-repo/releases) of this project.
+   - Download the `install.exe` and `uninstall.exe` files from the latest release.
+
+2. **Install the Context Menu Item:**
+   - Run the `install.exe` file.
+   - By default, it will use the path `C:\Users\%USERNAME%\AppData\Local\Programs\cursor\Cursor.exe` for the Cursor application.
+   - If you want to use a custom path for the Cursor executable, provide the path as a command-line argument when running `install.exe`.
+
+3. **Uninstall the Context Menu Item:**
+   - Run the `uninstall.exe` file to remove the context menu item.
+
