@@ -12,10 +12,11 @@ bool DeleteRegistryKey(HKEY hKeyParent, LPCSTR subKey) {
 
 bool UninstallContextMenu() {
     std::string subKey = "Directory\\Background\\shell\\Open with Cursor";
-    if (!DeleteRegistryKey(HKEY_CLASSES_ROOT, subKey.c_str())) {
-        return false;
-    }
-    return true;
+    std::string subKeyAll = "*\\shell\\Open with Cursor";
+    bool success = DeleteRegistryKey(HKEY_CLASSES_ROOT, subKey.c_str());
+    bool successAll = DeleteRegistryKey(HKEY_CLASSES_ROOT, subKeyAll.c_str());
+
+    return success || successAll;
 }
 
 int main() {
