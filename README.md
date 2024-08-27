@@ -26,6 +26,7 @@ To use the context menu item, follow these steps:
    - Run the `install.exe` file.
    - By default, it will use the path `C:\Users\%USERNAME%\AppData\Local\Programs\cursor\Cursor.exe` for the Cursor application.
    - If you want to use a custom path for the Cursor executable, provide the path as a command-line argument when running `install.exe`.
+   - You can also provide the command-line argument `-a` to install the context menu item for all files, not just directories.
 
 3. **Uninstall the Context Menu Item:**
    - Run the `uninstall.exe` file to remove the context menu item.
