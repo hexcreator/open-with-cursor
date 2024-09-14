@@ -88,7 +88,7 @@ bool FileExists(const std::string& path)
     return (attrib != INVALID_FILE_ATTRIBUTES && !(attrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
-bool InstallContextMenu(const std::string& exePath)
+bool InstallContextMenu(const std::string& exePath, bool installForAllFiles)
 {
     if (!FileExists(exePath))
     {
@@ -96,7 +96,7 @@ bool InstallContextMenu(const std::string& exePath)
         return false;
     }
 
-    std::string subKey = "Directory\\Background\\shell\\Open with Cursor";
+    std::string subKey = installForAllFiles ? "*\\shell\\Open with Cursor" : "Directory\\Background\\shell\\Open with Cursor";
     std::string commandKey = subKey + "\\command";
 
     if (!CreateRegistryKey(HKEY_CLASSES_ROOT, subKey.c_str(), NULL, "Open with Cursor"))
@@ -117,6 +117,7 @@ bool InstallContextMenu(const std::string& exePath)
 
 int main(int argc, char* argv[])
 {
+    bool installForAllFiles = false;
     if (!IsElevated())
     {
         RunAsAdmin(argv[0], (argc > 1) ? argv[1] : "");
@@ -124,9 +125,16 @@ int main(int argc, char* argv[])
     }
 
     std::string exePath = GetCursorPath();
-    if (argc > 1)
+    for (int i = 1; i < argc; i++)
     {
-        exePath = argv[1];
+        const std::string arg = std::string(argv[i]);
+        if (arg == "-a" || arg == "--all")
+        {
+            installForAllFiles = true;
+        }
+        else {
+            exePath = arg;
+        }
     }
 
     if (exePath.empty())
