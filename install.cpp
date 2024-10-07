@@ -96,22 +96,63 @@ bool InstallContextMenu(const std::string& exePath, bool installForAllFiles)
         return false;
     }
 
-    std::string subKey = installForAllFiles ? "*\\shell\\Open with Cursor" : "Directory\\Background\\shell\\Open with Cursor";
-    std::string commandKey = subKey + "\\command";
+    // Add context menu for right-clicking inside a folder (existing behavior)
+    std::string insideFolderSubKey = "Directory\\Background\\shell\\Open with Cursor";
+    std::string insideFolderCommandKey = insideFolderSubKey + "\\command";
 
-    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, subKey.c_str(), NULL, "Open with Cursor"))
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, insideFolderSubKey.c_str(), NULL, "Open with Cursor"))
     {
         return false;
     }
-    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, subKey.c_str(), "Icon", exePath.c_str()))
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, insideFolderSubKey.c_str(), "Icon", exePath.c_str()))
     {
         return false;
     }
-    std::string commandValue = "\"" + exePath + "\" \"%V\"";
-    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, commandKey.c_str(), NULL, commandValue.c_str()))
+    std::string insideFolderCommandValue = "\"" + exePath + "\" \"%V\"";
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, insideFolderCommandKey.c_str(), NULL, insideFolderCommandValue.c_str()))
     {
         return false;
     }
+
+    // Add context menu for right-clicking on a folder
+    std::string onFolderSubKey = "Directory\\shell\\Open with Cursor";
+    std::string onFolderCommandKey = onFolderSubKey + "\\command";
+
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, onFolderSubKey.c_str(), NULL, "Open with Cursor"))
+    {
+        return false;
+    }
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, onFolderSubKey.c_str(), "Icon", exePath.c_str()))
+    {
+        return false;
+    }
+    std::string onFolderCommandValue = "\"" + exePath + "\" \"%1\"";
+    if (!CreateRegistryKey(HKEY_CLASSES_ROOT, onFolderCommandKey.c_str(), NULL, onFolderCommandValue.c_str()))
+    {
+        return false;
+    }
+
+    // Add context menu for all files if requested
+    if (installForAllFiles)
+    {
+        std::string allFilesSubKey = "*\\shell\\Open with Cursor";
+        std::string allFilesCommandKey = allFilesSubKey + "\\command";
+
+        if (!CreateRegistryKey(HKEY_CLASSES_ROOT, allFilesSubKey.c_str(), NULL, "Open with Cursor"))
+        {
+            return false;
+        }
+        if (!CreateRegistryKey(HKEY_CLASSES_ROOT, allFilesSubKey.c_str(), "Icon", exePath.c_str()))
+        {
+            return false;
+        }
+        std::string allFilesCommandValue = "\"" + exePath + "\" \"%1\"";
+        if (!CreateRegistryKey(HKEY_CLASSES_ROOT, allFilesCommandKey.c_str(), NULL, allFilesCommandValue.c_str()))
+        {
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -143,7 +184,7 @@ int main(int argc, char* argv[])
         return 1;
     }
 
-    if (InstallContextMenu(exePath))
+    if (InstallContextMenu(exePath, installForAllFiles))
     {
         std::string successMsg = "Context menu item installed successfully.\nPath: " + exePath;
         MessageBoxA(NULL, successMsg.c_str(), "Success", MB_OK | MB_ICONINFORMATION);
