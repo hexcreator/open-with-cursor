@@ -2,6 +2,8 @@
 
 This project provides a simple way to add and remove a context menu item in Windows Explorer for opening directories with the Cursor application.
 
+[Follow my X!](https://x.com/hexcreator) ![x icon](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/X_icon.svg/12px-X_icon.svg.png)
+
 ## Installation
 
 To install the context menu item, run the `install` executable. By default, it will use the path `C:\Users\%USERNAME%\AppData\Local\Programs\cursor\Cursor.exe` for the Cursor application. You can also provide a custom path to the Cursor executable as a command-line argument.
