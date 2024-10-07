@@ -2,7 +2,16 @@
 
 This project provides a simple way to add and remove a context menu item in Windows Explorer for opening directories with the Cursor application.
 
-[Follow my X!](https://x.com/hexcreator) ![x icon](https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/X_icon.svg/12px-X_icon.svg.png)
+<div align="center">
+  <p>
+    🤝 Show your support - give a ⭐️ if you liked the tool 🤝
+  </p>
+  <p>
+    <a target="_blank" href='https://twitter.com/hexcreator'><img src="https://img.shields.io/twitter/follow/hexcreator" alt="X (formerly Twitter) Follow" width="180" height="30"/></a>
+  </p>
+</div>
+
+---
 
 ## Installation
 
